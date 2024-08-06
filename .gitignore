@@ -1,0 +1,6 @@
+.idea
+.venv
+.python-version
+*.iml
+*.lock
+__pycache__/
