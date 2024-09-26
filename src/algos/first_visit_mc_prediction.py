@@ -22,7 +22,8 @@ class FirstVisitMCPrediction(MonteCarloAlgo):
         episode: Episode = []
         while not is_terminated:
             action = policy[current_state]
-            next_state, reward, truncated, info, is_terminated = self.env.step(action)
+            next_state, reward, terminated, truncated, info = self.env.step(action)
+            is_terminated = terminated or truncated
             episode.append((current_state, action, float(reward)))
             current_state = next_state
         return episode
@@ -33,10 +34,19 @@ class FirstVisitMCPrediction(MonteCarloAlgo):
             G = 0
             for i, (state, _, reward) in enumerate(episode[::-1]):
                 G = self.gamma * reward + G
-                if len(episode[:i]) == 0 or state not in [s for s, _, _ in episode[:i][0]]:
+                if self._is_first_time_in_state(episode, i, state):
                     if state not in self.Returns:
                         self.Returns[state] = [G]
                     else:
                         self.Returns[state].append(G)
-                    self.V[state] = np.mean(self.Returns[state])
-            print(f"{self.V=}")
+                    self.V[state] = float(np.mean(self.Returns[state]))
+        print(f"Final value function (node: mean_return): {sorted(self.V.items(), key=lambda item: item[1], reverse=True)=}")
+
+    @staticmethod
+    def _is_first_time_in_state(episode, i, state):
+        if len(episode[:i]) == 0:
+            return True
+        for s, _, _ in episode[:i]:
+            if s == state:
+                return False
+        return True

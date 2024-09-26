@@ -15,7 +15,7 @@ poetry install
 Vous pouvez ensuite lancer le fichier `main.py`:
 
 ```bash
-poetry run python main.py
+poetry run python src/main.py
 ```
 
 N'hésitez pas à modifier la fonction `main()` du fichier `main.py` pour tester les différents algorithmes. Vous avez simplement à toggle les commentaires.

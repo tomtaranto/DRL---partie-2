@@ -13,9 +13,9 @@ from utils.utils import RenderMode, RandomIntDict, RandomDict
 def first_visit_mc_prediction() -> None:
     env = gym.make("CliffWalking-v0", render_mode=RenderMode.NO_RENDER.value)
     actions = env.action_space.n
-    print(f"{actions=}")
+    print(f"Nombre d'actions possibles: {actions}")
     policy = RandomIntDict(actions)
-    print(f"{policy=}")
+    print(f"Policy initiale: {policy}")
     algo = FirstVisitMCPrediction(env, policy, iterations=10)
     algo.train()
 
@@ -98,9 +98,6 @@ def plot_policy(policy: Policy) -> None:
                 color = 'red'
             rect = patches.Rectangle((col - 0.5, row - 0.5), 1, 1, linewidth=1, edgecolor='black', facecolor=color)
             ax.add_patch(rect)
-            # if cell_number%2==0:
-            #     ax.scatter(col, row, color='red', marker='o', s=100, label=f'({col},{row})')
-            #     ax.text(col, row, f'{cell_number}', fontsize=12, ha='right', color='red')
 
     ax.set_xlim(-0.5, cols - 0.5)
     ax.set_ylim(-0.5, rows - 0.5)
